@@ -9,6 +9,9 @@ What is the purpose?
 
 Since 2010, I've been logging my location history every 20 minutes. I find it to be really cool to look at a map showing me everywhere I have gone in the past few years.
 
+![Imgur](http://i.imgur.com/YA9qgau.png)
+
+
 Why should I use your code?
 ===========================
 
