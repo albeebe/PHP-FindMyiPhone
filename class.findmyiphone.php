@@ -32,8 +32,6 @@ class FindMyiPhone {
 	private $debug;
 	private $username;
 	private $password;
-	private $Apple_MMe_Host;
-	private $Apple_MMe_Scope;
 	public $devices = array();
 	
 	/**
