@@ -79,7 +79,7 @@ class FindMyiPhone {
      * @param message	Message you want displayed on the device
      */
 	public function playSound($deviceID, $message) {
-		$url = "https://".$this->Apple_MMe_Host."/fmipservice/device/".$this->Apple_MMe_Scope."/playSound";
+		$url = "https://fmipmobile.icloud.com/fmipservice/device/".$this->username."/playSound";
 		$body = json_encode(array("device"=>$deviceID, "subject"=>$message)); 
 		list($headers, $body) = $this->curlPOST($url, $body, $this->username.":".$this->password);
 	}
@@ -93,7 +93,7 @@ class FindMyiPhone {
      * @param phoneNumber	(Optional) Phone number you want displayed on the lock screen
      */
 	public function lostMode($deviceID, $message, $phoneNumber = "") {
-		$url = "https://".$this->Apple_MMe_Host."/fmipservice/device/".$this->Apple_MMe_Scope."/lostDevice";
+		$url = "https://fmipmobile.icloud.com/fmipservice/device/".$this->username."/lostDevice";
 		$body = json_encode(array("device"=>$deviceID, "ownerNbr"=>$phoneNumber, "text"=>$message, "lostModeEnabled"=>true)); 
 		list($headers, $body) = $this->curlPOST($url, $body, $this->username.":".$this->password);
 	}
@@ -172,8 +172,7 @@ TABLEFOOTER;
 	private function authenticate() {
 		$url = "https://fmipmobile.icloud.com/fmipservice/device/".$this->username."/initClient";
 		list($headers, $body) = $this->curlPOST($url, "", $this->username.":".$this->password);
-		$this->Apple_MMe_Host = $headers["X-Apple-MMe-Host"];
-		$this->Apple_MMe_Scope = $headers["X-Apple-MMe-Scope"];
+		
 		if ($headers["http_code"] == 401) {
 			throw new Exception('Your iCloud username and/or password are invalid');
 		}
@@ -184,7 +183,7 @@ TABLEFOOTER;
      * Example: print_r($fmi->devices)
      */
 	private function getDevices() {
-		$url = "https://".$this->Apple_MMe_Host."/fmipservice/device/".$this->Apple_MMe_Scope."/initClient";
+		$url = "https://fmipmobile.icloud.com/fmipservice/device/".$this->username."/initClient";
 		list($headers, $body) = $this->curlPOST($url, "", $this->username.":".$this->password);
 		$this->devices = array();
 		for ($x = 0; $x < sizeof($body["content"]); $x++) {
@@ -220,7 +219,7 @@ TABLEFOOTER;
 	 * This method refreshes the list of devices on the users iCloud account
 	 */
 	private function refreshDevices($deviceID = "") {
-		$url = "https://".$this->Apple_MMe_Host."/fmipservice/device/".$this->Apple_MMe_Scope."/refreshClient";
+		$url = "https://fmipmobile.icloud.com/fmipservice/device/".$this->username."/refreshClient";
 		if (strlen($deviceID) > 0) {
 			$body = json_encode(array("clientContext"=>array("appVersion"=>$this->client["app-version"], "shouldLocate"=>true, "selectedDevice"=>$deviceID, "fmly"=>true)));
 		}
