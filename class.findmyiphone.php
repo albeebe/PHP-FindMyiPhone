@@ -237,7 +237,8 @@ TABLEFOOTER;
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $body);                                                                  
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_VERBOSE, 1);
+		if ($this->debug)
+			curl_setopt($ch, CURLOPT_VERBOSE, 1);
 		curl_setopt($ch, CURLOPT_HEADER, 1);
 		curl_setopt($ch, CURLOPT_USERAGENT, $this->client["user-agent"]);
 		if (strlen($authentication) > 0) {
