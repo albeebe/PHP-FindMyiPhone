@@ -1,7 +1,7 @@
 PHP-FindMyiPhone
 ================
 
-PHP class to locate, play sounds, and lock iOS devices
+PHP package to locate, play sounds, and lock iOS devices
 
 
 What is the purpose?
@@ -35,8 +35,8 @@ Whats the simplest piece of code to get up and running
 
 ```php
 <?php
-	include ("class.findmyiphone.php");
-	$fmi = new FindMyiPhone("icloud_username", "icloud_password");
+	require_once __DIR__ . '/vendor/autoload.php';
+	$fmi = new FindMyiPhone\Client("icloud_username", "icloud_password");
 	$fmi->printDevices();
 ?>
 ```

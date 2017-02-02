@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /*
  Copyright (C) Alan Beebe (alan.beebe@gmail.com).
@@ -17,8 +17,12 @@
   v1.0 - January 2, 2015
   
 */
- 
-class FindMyiPhone {
+
+namespace FindMyiPhone;
+
+use Exception;
+
+class Client {
 
 	private $client = array(
 						"app-version" => "4.0",
@@ -194,14 +198,14 @@ TABLEFOOTER;
 	 * This method takes the raw device details from the API and converts it to a FindMyiPhoneDevice object
 	 */
 	private function generateDevice($deviceDetails) {
-		$device = new FindMyiPhoneDevice();	
+		$device = new Device();	
 		$device->API = $deviceDetails;
 		$device->ID = $device->API["id"];
 		$device->batteryLevel = $device->API["batteryLevel"];
 		$device->batteryStatus = $device->API["batteryStatus"];
 		$device->class = $device->API["deviceClass"];
 		$device->displayName = $device->API["deviceDisplayName"];
-		$device->location = new FindMyiPhoneLocation();
+		$device->location = new Location();
 		$device->location->timestamp = $device->API["location"]["timeStamp"];
 		$device->location->horizontalAccuracy = $device->API["location"]["horizontalAccuracy"];
 		$device->location->positionType = $device->API["location"]["positionType"];
@@ -293,27 +297,4 @@ HTML;
         }
 		return array($headers, json_decode($responseBody, true));
 	}
-}
-
-
-class FindMyiPhoneDevice {
-	public $ID;
-	public $batteryLevel;
-	public $batteryStatus;
-	public $class;
-	public $displayName;
-	public $location;
-	public $model;
-	public $modelDisplayName;
-	public $name;
-	public $API;
-}
-
-
-class FindMyiPhoneLocation {
-	public $timestamp;
-	public $horizontalAccuracy;
-	public $positionType;
-	public $longitude;
-	public $latitude;
 }
