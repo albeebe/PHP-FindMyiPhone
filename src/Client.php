@@ -184,7 +184,7 @@ TABLEFOOTER;
      * This is where all the devices are downloaded and processed
      * Example: print_r($fmi->devices)
      */
-	private function getDevices() {
+	public function getDevices() {
 		$url = "https://fmipmobile.icloud.com/fmipservice/device/".$this->username."/initClient";
 		list($headers, $body) = $this->curlPOST($url, "", $this->username.":".$this->password);
 		$this->devices = array();
