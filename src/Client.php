@@ -264,9 +264,12 @@ TABLEFOOTER;
 			if ($i === 0)
             	$headers['http_code'] = $info["http_code"];
 			else {
-            	list ($key, $value) = explode(': ', $line);
-            	if (strlen($key) > 0)
-	            	$headers[$key] = $value;
+				$part = explode(': ', $line);
+				if (count($part)>1) {
+            		list ($key, $value) = explode(': ', $line);
+            		if (strlen($key) > 0)
+	            		$headers[$key] = $value;
+				}
 			}
         }
         if ($this->debug) {
