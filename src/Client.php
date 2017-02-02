@@ -250,7 +250,7 @@ TABLEFOOTER;
 			curl_setopt($ch, CURLOPT_USERPWD, $authentication);  
 		}
 		$arrHeaders = array();
-		$arrHeaders["Content-Length"] = strlen($request);
+		//$arrHeaders["Content-Length"] = strlen($request);
 		foreach ($this->client["headers"] as $key=>$value) {
 			array_push($arrHeaders, $key.": ".$value);
 		}
