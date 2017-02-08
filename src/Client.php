@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /*
  Copyright (C) Alan Beebe (alan.beebe@gmail.com).
@@ -17,8 +17,12 @@
   v1.0 - January 2, 2015
   
 */
- 
-class FindMyiPhone {
+
+namespace FindMyiPhone;
+
+use Exception;
+
+class Client {
 
 	private $client = array(
 						"app-version" => "4.0",
@@ -180,7 +184,7 @@ TABLEFOOTER;
      * This is where all the devices are downloaded and processed
      * Example: print_r($fmi->devices)
      */
-	private function getDevices() {
+	public function getDevices() {
 		$url = "https://fmipmobile.icloud.com/fmipservice/device/".$this->username."/initClient";
 		list($headers, $body) = $this->curlPOST($url, "", $this->username.":".$this->password);
 		$this->devices = array();
@@ -194,14 +198,14 @@ TABLEFOOTER;
 	 * This method takes the raw device details from the API and converts it to a FindMyiPhoneDevice object
 	 */
 	private function generateDevice($deviceDetails) {
-		$device = new FindMyiPhoneDevice();	
+		$device = new Device();	
 		$device->API = $deviceDetails;
 		$device->ID = $device->API["id"];
 		$device->batteryLevel = $device->API["batteryLevel"];
 		$device->batteryStatus = $device->API["batteryStatus"];
 		$device->class = $device->API["deviceClass"];
 		$device->displayName = $device->API["deviceDisplayName"];
-		$device->location = new FindMyiPhoneLocation();
+		$device->location = new Location();
 		$device->location->timestamp = $device->API["location"]["timeStamp"];
 		$device->location->horizontalAccuracy = $device->API["location"]["horizontalAccuracy"];
 		$device->location->positionType = $device->API["location"]["positionType"];
@@ -237,14 +241,16 @@ TABLEFOOTER;
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $body);                                                                  
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_VERBOSE, 1);
+		if ($this->debug) {
+			curl_setopt($ch, CURLOPT_VERBOSE, 1);
+		}
 		curl_setopt($ch, CURLOPT_HEADER, 1);
 		curl_setopt($ch, CURLOPT_USERAGENT, $this->client["user-agent"]);
 		if (strlen($authentication) > 0) {
 			curl_setopt($ch, CURLOPT_USERPWD, $authentication);  
 		}
 		$arrHeaders = array();
-		$arrHeaders["Content-Length"] = strlen($request);
+		//$arrHeaders["Content-Length"] = strlen($request);
 		foreach ($this->client["headers"] as $key=>$value) {
 			array_push($arrHeaders, $key.": ".$value);
 		}
@@ -258,9 +264,12 @@ TABLEFOOTER;
 			if ($i === 0)
             	$headers['http_code'] = $info["http_code"];
 			else {
-            	list ($key, $value) = explode(': ', $line);
-            	if (strlen($key) > 0)
-	            	$headers[$key] = $value;
+				$part = explode(': ', $line);
+				if (count($part)>1) {
+            		list ($key, $value) = explode(': ', $line);
+            		if (strlen($key) > 0)
+	            		$headers[$key] = $value;
+				}
 			}
         }
         if ($this->debug) {
@@ -293,27 +302,4 @@ HTML;
         }
 		return array($headers, json_decode($responseBody, true));
 	}
-}
-
-
-class FindMyiPhoneDevice {
-	public $ID;
-	public $batteryLevel;
-	public $batteryStatus;
-	public $class;
-	public $displayName;
-	public $location;
-	public $model;
-	public $modelDisplayName;
-	public $name;
-	public $API;
-}
-
-
-class FindMyiPhoneLocation {
-	public $timestamp;
-	public $horizontalAccuracy;
-	public $positionType;
-	public $longitude;
-	public $latitude;
 }
